@@ -10,7 +10,52 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+use App\User;
+use App\Post;
+use App\Comment;
+Route::get('/user_posts',function (){
+    return App\User::find(1);
+    //Another way to create and inser into DB
+    App\User::create(['name'=>'Zoe','email'=> 'zoe@gmail.com'
+    ,'contact'=> '091234321','avatar'=>'default.jpg',
+        'password'=>bcrypt('password')]);
 
+    //Create new user and save on DB
+    $newUser= new App\User();
+    $newUser->name= " Pedro";
+    $newUser->email= "Pedro@gmail.com";
+    $newUser->contact="913333333";
+    $newUser->password=bcrypt('teste');
+    $newUser->avatar="default.jpg";
+    $newUser->save();
+    $newUserId=$newUser->id;
+    $exstingUser= App\User::find($newUserId);
+    $exstingUser->contact="913333334";
+    $exstingUser->save();
+
+    // Posts with tags and comments
+    $posts= Post::with(['comments','tags'])->get();
+    return $posts;
+    $users=User::all();
+
+    foreach ($users as $user){
+        echo "<h1> {$user->name} </h1>";
+        echo "<ul>";
+        foreach ($user->posts as $post){
+            echo "<li> {$post->title} </li>";
+
+            if(count($post->tags)>0){
+                echo "Tags:<ol>";
+                foreach($post->tags as $tag){
+                    echo "<li> {$tag->title} </li>";
+                }
+                echo "</ol>";
+            }
+        }
+        echo "</ul>";
+    }
+
+});
 Route::get('/', function () {
     return view('welcome');
 });
@@ -50,9 +95,14 @@ Route::get('/routes', function (){
 });
 Route::get('/testeuser', 'UserController@index');
 
-
 Route::get('/query',function(){
    $users=DB::table('users')->get();
-    return $users;
 
+    $posts= DB::table('posts')->join('users','users.id','=','posts.user_id')->
+        select("users.name",'posts.title')->get();
+    return $posts;
+    //return $users;
 });
+
+
+Route::get('/getall','UserController@getAll');

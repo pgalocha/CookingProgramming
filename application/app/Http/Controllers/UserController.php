@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use App\User;
 class UserController extends Controller
 {
 
@@ -16,6 +17,10 @@ class UserController extends Controller
         $object= new \stdClass();
         $object->property = "Here we go";
         return response()->json($object);
+    }
+
+    public function getAll(){
+        return User::all();
     }
 
 

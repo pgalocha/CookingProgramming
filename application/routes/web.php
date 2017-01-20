@@ -57,8 +57,21 @@ Route::get('/user_posts',function (){
 
 });
 Route::get('/', function () {
-    return view('welcome');
+    return Redirect::to('/index.html');
 });
+
+Route::get('routes',function(){
+\Artisan::call('route:list');
+    return "<pre>".\Artisan::output();
+});
+
+Route::get('/posts/last/{n?}','PostController@last');
+Route::get('/menuinfo', 'BlogController@getMenuInfo');
+Route::get('/users/posts', 'UserController@getAllPosts');
+Route::get('/comments', 'CommentController@getAll');
+Route::get('/tags/posts', 'TagController@getAllWithPosts');
+
+
 Route::group(['prefix'=> '/user'],function(){
     Route::get('/',function(){
         echo "user";

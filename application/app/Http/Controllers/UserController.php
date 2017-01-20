@@ -23,5 +23,14 @@ class UserController extends Controller
         return User::all();
     }
 
+    public function getAllPosts()
+    {
+        return User::select('id','name','email')
+            ->with(['posts'=>function($q){
+       $q->select('id','title','user_id')->active();
+    }])
+        ->get();
+    }
+
 
 }

@@ -32,5 +32,23 @@ class CommentController extends Controller
             ->take($n)
             ->get();
     }
+    public function getCommentsByPost($id){
+        return Comment::select('*')
+            ->where('post_id','=',$id)
+            ->get();
+    }
+    public function save(Request $request){
+        $comment = null;
+        if ($request->id){ //edit
+            $comment=Comment::find($request->id);
+        }else{ //new
+            $comment = new Comment();
+        }
+        $comment->text = $request->text;
+        $comment->active = $request->active;
+        $comment->email = $request->email;
+        $comment->save();
+        return $comment;
+    }
 
 }

@@ -29,39 +29,55 @@
                 <li><a href="index.html#!/tags">Tags</a></li>
             </ul>
             <div class="navbar-right ">
-                <ul class="nav navbar-nav">
-                    <li><a href="#/login">Login</a></li>
+                <ul class="nav navbar-nav" ng-show="$root.authuser==null">
+                    <li><a href="index.html#!/login">Login</a></li>
                 </ul>
             </div>
         </div>
     </div>
 </nav>
 <div class="container">
+    <div id="loading" loading-indicator></div>
     <div class="row">
         <div class="col-sm-8" ng-view></div>
         <div class="col-sm-4" ng-controller="menuController">
             <h3>Tags</h3>
-            <span ng-repeat="tag in tags" class="badge tag">
-{{tag.title}}
-</span>
+            <span ng-repeat="tag in tags" class="badge tag">{{tag.title}}</span>
             <hr/>
             <h3>Últimos Comentários</h3>
             <blockquote ng-repeat="comment in comments">
                 {{comment.text}}
                 <small> {{comment.post.title}} </small>
             </blockquote>
+            <div ng-show="$root.authuser!=null">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        Olá {{$root.authuser.name}}
+                    </div>
+                    <div class="panel-body">
+                        <p>Seja bem vindo! </p>
+                    </div>
+                    <ul class="list-group">
+                        <a href="admin.html" class="list-group-item">Admin</a>
+                        <a href="admin.html#/newpost" class="list-group-item">Novo Post</a>
+                        <a href="admin.html#/perfil" class="list-group-item">Perfil</a>
+                        <a href="index.html#!/logout" class="list-group-item">Sair</a>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 <div class='notifications bottom-right'></div>
-
-
-</body>
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="bower_components/bootstrap-notify/js/bootstrap-notify.js"></script>
+<script src="bower_components\bootstrap-notify\js\bootstrap-notify.js"></script>
 <script src="bower_components/angular/angular.min.js"></script>
 <script src="bower_components/angular-route/angular-route.min.js"></script>
 <script src="bower_components/angular-resource/angular-resource.min.js"></script>
-<script src="js/app.js"></script>
+<script src="js/base.js"></script>
+<script src="js/index.js"></script>
+
+</body>
+
 </html>

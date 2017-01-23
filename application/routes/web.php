@@ -10,14 +10,15 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+use Illuminate\Http\Request;
 use App\User;
 use App\Post;
 use App\Comment;
 Route::get('/user_posts',function (){
-    return App\User::find(1);
+    //return App\User::find(1);
     //Another way to create and inser into DB
-    App\User::create(['name'=>'Zoe','email'=> 'zoe@gmail.com'
-    ,'contact'=> '091234321','avatar'=>'default.jpg',
+    App\User::create(['name'=>'Zoe','email'=> 'zoe12345@gmail.com'
+        ,'contact'=> '091234321','avatar'=>'default.jpg',
         'password'=>bcrypt('password')]);
 
     //Create new user and save on DB
@@ -61,7 +62,7 @@ Route::get('/', function () {
 });
 
 Route::get('routes',function(){
-\Artisan::call('route:list');
+    \Artisan::call('route:list');
     return "<pre>".\Artisan::output();
 });
 
@@ -70,7 +71,12 @@ Route::get('/menuinfo', 'BlogController@getMenuInfo');
 Route::get('/users/posts', 'UserController@getAllPosts');
 Route::get('/comments', 'CommentController@getAll');
 Route::get('/tags/posts', 'TagController@getAllWithPosts');
-
+Route::post('/dologin','UserController@doLogin');
+Route::post('/dologin','UserController@doLogin');
+Route::get('/checklogin','UserController@checkLogin');
+Route::get('/logout','UserController@doLogout');
+Route::post('/user/newlogin','UserController@createLogin');
+Route::get('/login','UserController@getLogin');
 
 Route::group(['prefix'=> '/user'],function(){
     Route::get('/',function(){
@@ -109,13 +115,28 @@ Route::get('/routes', function (){
 Route::get('/testeuser', 'UserController@index');
 
 Route::get('/query',function(){
-   $users=DB::table('users')->get();
+    $users=DB::table('users')->get();
 
     $posts= DB::table('posts')->join('users','users.id','=','posts.user_id')->
-        select("users.name",'posts.title')->get();
+    select("users.name",'posts.title')->get();
     return $posts;
     //return $users;
 });
 
 
 Route::get('/getall','UserController@getAll');
+
+Route::get('/tags', ['middleware'=>'auth',
+    'uses'=>'TagController@index']);
+Route::get('/tags/{id}', 'TagController@show');
+Route::post('/tags', 'TagController@save');
+
+
+//Rotas para posts
+Route::get('/posts', 'PostController@index');
+Route::get('/posts/getTitles', 'PostController@getTitles');
+//Rotas para comments
+Route::get('/comments/post/{id}',
+    'CommentController@getCommentsByPost');
+Route::post('/comments', ['middleware'=>'auth',
+    'uses'=>'CommentController@save']);

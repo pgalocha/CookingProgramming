@@ -28,4 +28,13 @@ class PostController extends Controller
             ->take($n)
             ->get();
     }
+
+    public function index()
+    {
+        return Post::get();
+    }
+    public function getTitles()
+    {
+        return Post::select('id','title')->get();
+    }
 }
